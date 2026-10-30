@@ -43,15 +43,24 @@ Derived from fixture-driven UIs — **not implemented yet**. Laravel should expo
 | Variant nested create/update | Edit form |
 | `GET/POST/PATCH /api/admin/categories` | Categories |
 
-## Admin — orders & customers
+## Admin — orders & customers (fulfillment-first)
+
+Orders split **payment status** vs **fulfillment / delivery status**.
+
+**Payment:** `unpaid | paid | refunded | failed`  
+**Fulfillment:** `awaiting_payment | to_pack | packing | ready_to_ship | shipped | out_for_delivery | delivered | cancelled | returned`
 
 | Endpoint | Used by |
 | --- | --- |
-| `GET /api/admin/orders?status=` | Orders list |
-| `GET /api/admin/orders/:id` | Order detail + line items |
-| `PATCH /api/admin/orders/:id` | Status: processing / shipped / cancelled + tracking |
+| `GET /api/admin/orders?fulfillment_status=&payment_status=` | Orders list + pipeline filters |
+| `GET /api/admin/orders/:id` | Detail: line items, address, timeline, shipment |
+| `PATCH /api/admin/orders/:id` | Update fulfillment status + packing notes |
+| `PATCH /api/admin/orders/:id/shipment` | Carrier, AWB/tracking, ETA, shipped/delivered timestamps |
+| `POST /api/admin/orders/bulk` | Body: `{ ids[], fulfillment_status }` — pack / ready / ship / OFD / delivered in bulk |
 | `GET /api/admin/customers` | Customers list |
 | `GET /api/admin/customers/:id` | Detail + addresses + orders |
+
+Shipment payload: `carrier`, `tracking_number`, `tracking_url?`, `shipped_at`, `estimated_delivery`, `delivered_at`.
 
 ## Admin — CMS / dashboard
 

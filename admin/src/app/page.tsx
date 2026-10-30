@@ -6,10 +6,12 @@ export default function DashboardPage() {
   const activeProducts = products.filter((p) => p.status === "active").length;
   const lowStock = products.filter((p) => p.stockTotal > 0 && p.stockTotal < 20).length;
   const openOrders = orders.filter((o) =>
-    ["pending", "paid", "processing"].includes(o.status),
+    ["to_pack", "packing", "ready_to_ship", "shipped", "out_for_delivery"].includes(
+      o.fulfillmentStatus,
+    ),
   ).length;
   const revenue = orders
-    .filter((o) => o.status !== "cancelled" && o.status !== "pending")
+    .filter((o) => o.paymentStatus === "paid")
     .reduce((sum, o) => sum + o.totalInr, 0);
 
   return (
@@ -48,7 +50,9 @@ export default function DashboardPage() {
                 </div>
                 <div className="text-right">
                   <p className="font-semibold">{formatInr(order.totalInr)}</p>
-                  <span className={`badge badge-${order.status}`}>{order.status}</span>
+                  <span className={`badge badge-ful-${order.fulfillmentStatus}`}>
+                    {order.fulfillmentStatus.replaceAll("_", " ")}
+                  </span>
                 </div>
               </li>
             ))}

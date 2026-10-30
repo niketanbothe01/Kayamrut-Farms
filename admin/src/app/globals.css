@@ -143,25 +143,37 @@ a {
 
 .badge-active,
 .badge-paid,
-.badge-delivered {
+.badge-delivered,
+.badge-ful-delivered {
   background: color-mix(in oklab, var(--ok) 16%, white);
   color: var(--ok);
 }
 
 .badge-draft,
-.badge-pending {
+.badge-pending,
+.badge-unpaid,
+.badge-ful-awaiting_payment,
+.badge-ful-to_pack {
   background: color-mix(in oklab, var(--warn) 18%, white);
   color: var(--warn);
 }
 
 .badge-archived,
-.badge-cancelled {
+.badge-cancelled,
+.badge-failed,
+.badge-ful-cancelled,
+.badge-ful-returned {
   background: color-mix(in oklab, var(--danger) 14%, white);
   color: var(--danger);
 }
 
 .badge-processing,
-.badge-shipped {
+.badge-shipped,
+.badge-refunded,
+.badge-ful-packing,
+.badge-ful-ready_to_ship,
+.badge-ful-shipped,
+.badge-ful-out_for_delivery {
   background: color-mix(in oklab, var(--forest) 12%, white);
   color: var(--forest);
 }
