@@ -3,6 +3,7 @@ vendor/
 .env
 .env.*
 !.env.example
+!**/.env.example
 dist/
 build/
 .DS_Store
