@@ -232,7 +232,28 @@ If the user later insists on “all Cloudflare,” options are: (a) rewrite API 
 
 ### Payments / India
 
-MVP checkout: **Razorpay** (orders API + webhook → Laravel). Ship INR pricing, GST fields on invoices as polish phase.
+**Yes — payment gateway is in scope for MVP**, not a later afterthought.
+
+- Currency: **INR** only for v1  
+- Flow: checkout creates a Laravel `Order` + `Payment` → provider order/session → browser pays (UPI / cards / netbanking / wallets) → **webhook** confirms → order `paid`  
+- Invoices / GST line items: polish phase  
+
+**Default in this plan: Razorpay** — strongest docs + Laravel ecosystem for a small team; standard public platform fee is about **2% + GST** on domestic success (verify current card: [razorpay.com/pricing](https://razorpay.com/pricing/)). No setup / AMC on the usual starter plan.
+
+**Cheaper / regional alternatives (same architecture — swap provider adapter):**
+
+| Gateway | Ballpark public domestic fee* | Why consider |
+| --- | --- | --- |
+| **Cashfree** | ~**1.95%** + tax (often runs new-merchant promos) | Slightly lower headline fee; strong payouts |
+| **PhonePe PG** | ~**1.99%** standard | UPI-familiar buyers; simple pricing |
+| **PayU** | ~**2%** domestic | Mature ecommerce; similar cost to Razorpay |
+| **Razorpay** (default) | ~**2%** platform fee + GST | Best DX / plugins; easiest MVP |
+
+\*Rates change and **UPI “zero MDR” ≠ always zero gateway fee** — many PGs still take a platform fee on UPI. Before go-live, ask each provider in writing for **UPI + RuPay** pricing on an organic D2C category; that line dominates cost if most customers pay UPI.
+
+**Implementation shape (provider-agnostic):** Laravel `Payments\Gateway` interface (`createPayment`, `verifyWebhook`, `refund`) with one adapter first (Razorpay or Cashfree). Switching later should not rewrite cart/orders.
+
+**Open choice:** keep Razorpay for speed, or pick **Cashfree / PhonePe** if fee is the priority — confirm before Phase 1 checkout work.
 
 ---
 
@@ -332,7 +353,7 @@ Admin UI may use denser components; **storefront** should follow brand visual ru
    - **B:** Laravel **Filament** (or Nova) served from `backend` — faster CRUD MVP, weaker CF Pages story for admin  
 3. **Hosting for Laravel:** Fly.io vs Railway vs Render vs existing VPS — pick one for Phase 3.  
 4. **Cloudflare purity:** confirm hybrid is OK (UI on CF, API off-CF).  
-5. **Payments:** Razorpay default for India — confirm.  
+5. **Payments:** Razorpay (DX default) vs **Cashfree / PhonePe** (often slightly cheaper public fees) — confirm; UPI fee in writing before prod.  
 6. **Guest checkout:** allow without account? (recommended: yes)  
 7. **Domain:** use `kayamrutfarms.com` when DNS is controllable; until then CF preview URLs.  
 
