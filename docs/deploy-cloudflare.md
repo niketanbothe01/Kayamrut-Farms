@@ -19,9 +19,13 @@
 
 You are already on **Workers & Pages**. The agent **cannot** open this dashboard.
 
+**Domain not required.** Use free `*.pages.dev` until you buy one.
+
+**Wrong path to avoid:** URL containing `/create/workers` with deploy command `npx wrangler deploy` — that is a **Worker**, not Next.js Pages. Hit **Back** and choose **Pages**.
+
 ### 1) Storefront
 
-1. **Create** → **Pages** → **Connect to Git**  
+1. **Create** → choose **Pages** (not Workers) → **Connect to Git**  
 2. Authorize GitHub account that owns `Kayamrut-Farms`  
 3. Select repo `niketanbothe01/Kayamrut-Farms`  
 4. Settings:
