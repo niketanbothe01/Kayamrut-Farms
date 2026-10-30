@@ -276,36 +276,33 @@ Nav mirrors IG highlights: Shop by **Ghee / Oils / Powders / Seeds / Makhana**, 
 
 ## 9. Phased build order
 
-### Phase 0 — Foundation (week-zero engineering)
+**User sequence (locked intent):** theme → **finish frontend** (fixtures) → freeze backend requirements → Laravel/API + admin → integration → lean deploy.  
+Theme options: [`theme-brief.md`](./theme-brief.md).
 
-- Root Compose + Makefiles/scripts  
-- Laravel app skeleton in `backend/` (Sanctum, modules or domain folders, healthcheck)  
-- Next storefront + admin skeletons (App Router, shared UI tokens)  
-- CI: lint/typecheck/phpunit smoke  
-- Seed categories + 8–12 products  
+### Phase 0 — Theme + frontend foundation
 
-### Phase 1 — MVP commerce
+- Lock visual direction (Forest Gold / Sunlit / Ritual — see theme brief)  
+- Scaffold Next.js storefront with design tokens + App Router  
+- Fixture-driven Home / Shop / PDP / Cart / checkout shell / About  
+- Root Compose can wait until API exists; frontend may run via Docker watch alone first  
 
-- Catalog APIs + storefront browse/PDP  
-- Cart + checkout + Razorpay test mode  
-- Order admin list/detail + status updates  
-- Basic CMS home blocks  
-- R2/MinIO image upload from admin  
+### Phase 1 — Backend requirements + Laravel MVP
 
-### Phase 2 — Polish
+- Derive OpenAPI-ish contract from storefront fixtures  
+- Laravel + MySQL 8 + Sanctum + catalog/cart/order endpoints  
+- Admin (Next or Filament — still open) for products/orders  
 
-- Coupons, bestsellers badges, notify-me  
-- Customer accounts + order history  
-- Emails (order confirmation) via queue  
-- SEO (slugs, meta, sitemap)  
-- Testimonials module  
+### Phase 2 — Integration
 
-### Phase 3 — Deploy
+- Wire storefront to real API  
+- Payment adapter (Razorpay or cheaper IN PG) test mode  
+- Auth, webhooks, emails via queue  
 
-- OpenNext → Cloudflare Pages (preview + prod)  
-- Laravel origin + managed DB/Redis  
-- Custom domains, WAF, backups, error tracking  
-- Production Razorpay + shipping workflow  
+### Phase 3 — Lean deploy
+
+- Storefront (+ admin) → Cloudflare Pages  
+- Laravel + MySQL on Railway / small VPS (Lean MVP budget)  
+- Production PG keys + domain  
 
 **Out of scope for early phases:** subscriptions/fruit boxes, full OMS, multi-warehouse, app native clients.
 
