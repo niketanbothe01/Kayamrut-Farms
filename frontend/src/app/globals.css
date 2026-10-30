@@ -1,0 +1,150 @@
+@import "tailwindcss";
+
+:root {
+  --forest: #1a3a2a;
+  --forest-deep: #102418;
+  --forest-soft: #2a5240;
+  --gold: #c4a35a;
+  --gold-bright: #e0c07a;
+  --gold-ink: #6b5420;
+  --cream: #f7f3ea;
+  --cream-strong: #fffdf8;
+  --ink: #142018;
+  --muted: #5c6b62;
+  --line: color-mix(in oklab, var(--forest) 12%, transparent);
+  --radius: 0.5rem;
+  --background: var(--cream);
+  --foreground: var(--ink);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-forest: var(--forest);
+  --color-forest-deep: var(--forest-deep);
+  --color-forest-soft: var(--forest-soft);
+  --color-gold: var(--gold);
+  --color-gold-bright: var(--gold-bright);
+  --color-gold-ink: var(--gold-ink);
+  --color-cream: var(--cream);
+  --color-cream-strong: var(--cream-strong);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --font-sans: var(--font-body);
+  --font-display: var(--font-display);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100%;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-body), system-ui, sans-serif;
+  text-rendering: optimizeLegibility;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+::selection {
+  background: color-mix(in oklab, var(--gold) 45%, white);
+  color: var(--forest-deep);
+}
+
+.font-display {
+  font-family: var(--font-display), Georgia, serif;
+}
+
+.container-page {
+  width: min(1120px, calc(100% - 2rem));
+  margin-inline: auto;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 2.75rem;
+  padding: 0.7rem 1.35rem;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  font-weight: 600;
+  font-size: 0.95rem;
+  letter-spacing: 0.01em;
+  transition: background 160ms ease, color 160ms ease, border-color 160ms ease,
+    transform 160ms ease;
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn-primary {
+  background: var(--gold);
+  color: var(--forest-deep);
+}
+
+.btn-primary:hover {
+  background: var(--gold-bright);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--cream-strong);
+  border-color: color-mix(in oklab, white 45%, transparent);
+}
+
+.btn-secondary:hover {
+  background: color-mix(in oklab, white 12%, transparent);
+}
+
+.btn-forest {
+  background: var(--forest);
+  color: var(--cream-strong);
+}
+
+.btn-forest:hover {
+  background: var(--forest-soft);
+}
+
+.surface-card {
+  background: var(--cream-strong);
+  border: 1px solid var(--line);
+  border-radius: calc(var(--radius) + 0.15rem);
+}
+
+.accent-swatch {
+  background: linear-gradient(
+    145deg,
+    color-mix(in oklab, var(--forest) 88%, black),
+    color-mix(in oklab, var(--gold) 55%, var(--forest))
+  );
+}
+
+.accent-swatch[data-accent="oil"] {
+  background: linear-gradient(145deg, #3d5c2e, #d4b45a);
+}
+
+.accent-swatch[data-accent="powder"] {
+  background: linear-gradient(145deg, #245c38, #7a9a4a);
+}
+
+.accent-swatch[data-accent="seed"] {
+  background: linear-gradient(145deg, #3a4a28, #b08a3c);
+}
+
+.accent-swatch[data-accent="makhana"] {
+  background: linear-gradient(145deg, #2f4636, #cfc3a1);
+}

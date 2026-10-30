@@ -347,6 +347,7 @@ Admin UI may use denser components; **storefront** should follow brand visual ru
 
 ### Decided
 
+0. **Theme:** **A — Forest Gold** (simple, user-friendly storefront). See [`theme-brief.md`](./theme-brief.md).
 1. **Database:** **MySQL 8** — familiarity / PDS muscle memory; Laravel supports it fully. Local Compose + lean host will run MySQL (or MariaDB-compatible) rather than Postgres.
 3. **Hosting budget / topology:** **Lean MVP** — target fixed run cost **~₹1.3k–4.7k/mo** (~$15–55). Prefer Cloudflare Free edge + cheap Laravel origin (**Railway Hobby** and/or small **Indian VPS** with Docker; avoid expensive managed Postgres products on day one). Scale up only when traffic/GMV justifies it. Details: [`costing.md`](./costing.md).
 

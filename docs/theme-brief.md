@@ -63,13 +63,10 @@ Praakritik remains the **commerce IA** reference (collections, variant add, badg
 
 ---
 
-## Decision needed from you
+## Decision
 
-Reply with one of:
-- **A** Forest Gold  
-- **B** Sunlit Pantry  
-- **C** Ritual Green  
-- **A+B** (recommended hybrid)  
-- Or paste another URL you love as the north star  
+**Chosen (2026-10-30 Europe/Dublin): A — Forest Gold** (premium ghee-led), executed **simple and user-friendly** (clear nav, large tap targets, plain language CTAs, no cluttered promo chrome).
 
-Then we scaffold `frontend/` Next.js with that theme and start the storefront.
+Primary tokens: deep forest green, warm ghee gold, soft off-white surfaces, high-contrast text. Daylight product photography welcome on shop/PDP grids; hero stays Forest Gold full-bleed.
+
+Next step: scaffold `frontend/` Next.js storefront against fixtures.
