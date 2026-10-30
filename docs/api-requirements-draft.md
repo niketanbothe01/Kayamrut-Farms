@@ -1,6 +1,6 @@
 # API requirements draft (from storefront + admin UI)
 
-Derived from fixture-driven UIs — **not implemented yet**. Laravel should expose roughly this surface.
+Derived from fixture-driven UIs. Laravel MVP slice on `cursor/backend-laravel-4b1a` covers **catalog + admin auth/dashboard/products/categories/orders/customers**. Still open: cart/checkout/webhooks, CMS, image upload, customer storefront auth.
 
 ## Auth
 

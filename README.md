@@ -6,7 +6,7 @@ Monorepo for Kayamrut Farms — organic superfoods ecommerce.
 
 - `frontend/` — customer storefront (Next.js, **Forest Gold** theme) → `:3000`
 - `admin/` — ops admin (Next.js, fixture-driven) → `:3001`
-- `backend/` — Laravel API (not scaffolded yet)
+- `backend/` — Laravel API + MySQL via Docker Compose → `:8080`
 
 ## Docs
 
@@ -17,11 +17,17 @@ Monorepo for Kayamrut Farms — organic superfoods ecommerce.
 ## Quick start
 
 ```bash
-# Storefront
-cd frontend && npm install && npm run dev
+# API + MySQL
+make up
+# → http://localhost:8080/api/health
 
-# Admin (other terminal)
-cd admin && npm install && npm run dev
+# Storefront
+cd frontend && npm install && npm run dev   # :3000
+
+# Admin
+cd admin && npm install && npm run dev     # :3001
 ```
 
-API sketch from the UIs: [docs/api-requirements-draft.md](./docs/api-requirements-draft.md).
+Admin API login: `admin@kayamrut.local` / `password`  
+
+API sketch: [docs/api-requirements-draft.md](./docs/api-requirements-draft.md).
