@@ -14,7 +14,7 @@
 | Media | Cloudflare R2 product images | Free tier often enough early |
 | DNS / TLS / WAF | Cloudflare | Free plan OK for MVP |
 | API | Laravel (web + queue) on Fly / Railway / Render / VPS | **Main fixed cost** |
-| Data | Postgres (or MySQL) + Redis | **Often largest fixed line** |
+| Data | **MySQL 8** + Redis | **Often largest fixed line** |
 | Email | Transactional (Resend / SES / Mailgun) | ~$0–20/mo early |
 | Domain | `.com` renewal | ~$10–15/yr |
 | Payments | Razorpay / Cashfree / PhonePe | **% of successful GMV** (variable) |
@@ -34,7 +34,7 @@ Assumes hybrid deploy from the architecture plan. Figures are **order-of-magnitu
 | R2 media | ≤10 GB free tier | $0 | ₹0 |
 | Laravel web | Fly `shared-cpu-1x` ~1 GB **or** Railway Hobby usage | $7–15 | ₹600–1,300 |
 | Queue worker | Same host, small machine / shared process early | $0–7 | ₹0–600 |
-| Database | Railway/Render small Postgres **or** cheap managed | $6–20 | ₹500–1,700 |
+| Database | MySQL on same VPS / Railway MySQL template | $6–20 | ₹500–1,700 |
 | Redis | Tiny / free-tier / shared | $0–10 | ₹0–850 |
 | Transactional email | Free tier | $0–5 | ₹0–400 |
 | Domain + misc | amortized | ~$1 | ~₹85 |
@@ -153,7 +153,11 @@ Assumes Recommended starter fixed (**≈ ₹6,500 / ~$75**) + PG on GMV.
 | Stable production (later) | **$60–120 / mo** (≈ ₹5k–10k) + PG % — only when needed |
 | Festival peaks | Expect infra + PG to spike with GMV; PG first |
 
-**Decided (2026-10-30 Europe/Dublin):** stick with **Lean MVP (~₹1.3k–4.7k/mo)** for now — Cloudflare Free edge + Railway Hobby and/or small Indian VPS; no managed Fly Postgres until scale requires it. Remaining micro-choice: Railway vs VPS before Phase 3.
+**Decided (2026-10-30 Europe/Dublin):**
+- **Lean MVP (~₹1.3k–4.7k/mo)** — Cloudflare Free edge + Railway Hobby and/or small Indian VPS; no expensive managed DB products on day one.
+- **MySQL 8** as the application database (user familiarity).
+
+Remaining micro-choice: Railway vs VPS before Phase 3.
 
 ---
 

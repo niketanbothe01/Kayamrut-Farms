@@ -46,7 +46,7 @@ flowchart TB
     API["Laravel API<br/>PHP-FPM + Nginx"]
     Queue["Laravel queue worker"]
     Scheduler["Laravel scheduler"]
-    DB[(Postgres or MySQL)]
+    DB[(MySQL 8)]
     Redis[(Redis<br/>cache + queues + sessions)]
   end
 
@@ -193,7 +193,7 @@ cp .env.example .env
 | `admin` | Next dev |
 | `api` | PHP 8.3-FPM + Nginx (or `laravel.php` octane later) |
 | `queue` | `php artisan queue:work` |
-| `db` | Postgres 16 **or** MySQL 8 *(open decision)* |
+| `db` | **MySQL 8** (decided) |
 | `redis` | Redis 7 |
 | `mailpit` | Dev SMTP |
 | `minio` | S3-compatible local stand-in for R2 |
@@ -350,11 +350,11 @@ Admin UI may use denser components; **storefront** should follow brand visual ru
 
 ### Decided
 
-3. **Hosting budget / topology:** **Lean MVP** — target fixed run cost **~₹1.3k–4.7k/mo** (~$15–55). Prefer Cloudflare Free edge + cheap Laravel origin (**Railway Hobby** and/or small **Indian VPS** with Docker; avoid Fly Managed Postgres Basic on day one). Scale up only when traffic/GMV justifies it. Details: [`costing.md`](./costing.md).
+1. **Database:** **MySQL 8** — familiarity / PDS muscle memory; Laravel supports it fully. Local Compose + lean host will run MySQL (or MariaDB-compatible) rather than Postgres.
+3. **Hosting budget / topology:** **Lean MVP** — target fixed run cost **~₹1.3k–4.7k/mo** (~$15–55). Prefer Cloudflare Free edge + cheap Laravel origin (**Railway Hobby** and/or small **Indian VPS** with Docker; avoid expensive managed Postgres products on day one). Scale up only when traffic/GMV justifies it. Details: [`costing.md`](./costing.md).
 
 ### Still open
 
-1. **Database:** Postgres 16 (recommended greenfield) vs MySQL 8 (closer to PDS muscle memory)?  
 2. **Admin implementation:**  
    - **A (recommended):** separate Next.js `admin/` talking to Laravel JSON API (CF Pages-friendly, matches scaffold)  
    - **B:** Laravel **Filament** (or Nova) served from `backend` — faster CRUD MVP, weaker CF Pages story for admin  
@@ -369,7 +369,8 @@ Admin UI may use denser components; **storefront** should follow brand visual ru
 ## 12. Success criteria for “ready to code”
 
 - [x] Hosting budget: Lean MVP (~₹1.3k–4.7k/mo)  
-- [ ] Remaining open decisions (DB, admin, hybrid CF, PG) answered  
+- [x] Database: MySQL 8  
+- [ ] Remaining open decisions (admin, hybrid CF, PG) answered  
 - [ ] This plan accepted  
 - [ ] Phase 0 Compose boots on Nick’s Mac with empty-ish but routable apps  
 - [ ] No proprietary PDS/frontend business logic in the new repo  
