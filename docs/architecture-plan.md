@@ -2,6 +2,7 @@
 
 **Status:** Planning deliverable (no app code yet)  
 **Repo:** https://github.com/niketanbothe01/Kayamrut-Farms  
+**Costing:** see [`costing.md`](./costing.md) (infra + India PG ballpark)  
 **Local:** `/Users/niketan.bothe/work/personal/Kayamrut-Farms`  
 **References:** Praakritik storefront IA (high-level), Instagram/brand notes, local PDS + frontend patterns (structure only)
 
