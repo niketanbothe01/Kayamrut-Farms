@@ -346,23 +346,30 @@ Admin UI may use denser components; **storefront** should follow brand visual ru
 
 ---
 
-## 11. Open decisions (need user input)
+## 11. Decisions
+
+### Decided
+
+3. **Hosting budget / topology:** **Lean MVP** — target fixed run cost **~₹1.3k–4.7k/mo** (~$15–55). Prefer Cloudflare Free edge + cheap Laravel origin (**Railway Hobby** and/or small **Indian VPS** with Docker; avoid Fly Managed Postgres Basic on day one). Scale up only when traffic/GMV justifies it. Details: [`costing.md`](./costing.md).
+
+### Still open
 
 1. **Database:** Postgres 16 (recommended greenfield) vs MySQL 8 (closer to PDS muscle memory)?  
 2. **Admin implementation:**  
    - **A (recommended):** separate Next.js `admin/` talking to Laravel JSON API (CF Pages-friendly, matches scaffold)  
    - **B:** Laravel **Filament** (or Nova) served from `backend` — faster CRUD MVP, weaker CF Pages story for admin  
-3. **Hosting for Laravel:** Fly.io vs Railway vs Render vs existing VPS — pick one for Phase 3.  
 4. **Cloudflare purity:** confirm hybrid is OK (UI on CF, API off-CF).  
 5. **Payments:** Razorpay (DX default) vs **Cashfree / PhonePe** (often slightly cheaper public fees) — confirm; UPI fee in writing before prod.  
 6. **Guest checkout:** allow without account? (recommended: yes)  
 7. **Domain:** use `kayamrutfarms.com` when DNS is controllable; until then CF preview URLs.  
+8. **Exact Lean host:** Railway vs small VPS (both fit the budget band) — pick before Phase 3 deploy.
 
 ---
 
 ## 12. Success criteria for “ready to code”
 
-- [ ] Open decisions 1–4 answered  
+- [x] Hosting budget: Lean MVP (~₹1.3k–4.7k/mo)  
+- [ ] Remaining open decisions (DB, admin, hybrid CF, PG) answered  
 - [ ] This plan accepted  
 - [ ] Phase 0 Compose boots on Nick’s Mac with empty-ish but routable apps  
 - [ ] No proprietary PDS/frontend business logic in the new repo  

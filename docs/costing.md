@@ -144,16 +144,16 @@ Assumes Recommended starter fixed (**≈ ₹6,500 / ~$75**) + PG on GMV.
 
 ---
 
-## 8. Suggested budget to approve
+## 8. Budget decision
 
 | Phase | Monthly run budget to plan for |
 | --- | --- |
 | Local / staging only | **$0** cloud (Docker on Mac) |
-| Public MVP | **$20–60 / mo** (≈ ₹1.7k–5k) + PG % on sales |
-| Stable production | **$60–120 / mo** (≈ ₹5k–10k) + PG % |
+| **Public MVP (chosen)** | **Lean: ~$15–55 / mo (≈ ₹1.3k–4.7k)** + PG % on sales |
+| Stable production (later) | **$60–120 / mo** (≈ ₹5k–10k) + PG % — only when needed |
 | Festival peaks | Expect infra + PG to spike with GMV; PG first |
 
-**Decision ask:** prefer **absolute cheapest lean** (VPS/Railway) or **managed comfort** (Fly/Render managed DB ~₹5k–10k/mo fixed)? That choice moves the fixed line more than Cloudflare does.
+**Decided (2026-10-30 Europe/Dublin):** stick with **Lean MVP (~₹1.3k–4.7k/mo)** for now — Cloudflare Free edge + Railway Hobby and/or small Indian VPS; no managed Fly Postgres until scale requires it. Remaining micro-choice: Railway vs VPS before Phase 3.
 
 ---
 
