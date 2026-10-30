@@ -71,7 +71,7 @@ flowchart TB
 | Static assets + images | Yes — **R2** (+ optional Images) | Product images, CMS media |
 | DNS, TLS, WAF, caching | Yes | Front everything |
 | Laravel (PHP), migrations, Eloquent, Horizon-style workers | **No** on Workers today (no durable PHP runtime; Containers exist but are early/ops-heavy) | Run Laravel on **Fly.io, Railway, Render, or a small VPS**; put Cloudflare proxy in front |
-| MySQL / Postgres | Not on CF | Managed DB next to Laravel (Fly Postgres, Railway, RDS, etc.) |
+| MySQL 8 | Not on CF | Next to Laravel on Railway / VPS / cheap managed MySQL |
 | Redis | Not on CF | Same provider as API or Upstash only if Laravel client is compatible for cache/queues |
 
 **Default deploy topology:** hybrid Cloudflare (UI + media + edge) + one small Laravel origin region (India-friendly latency if customers are primarily IN).
