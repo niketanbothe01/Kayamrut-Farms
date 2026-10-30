@@ -51,13 +51,27 @@ export default function ProductsPage() {
             {products.map((product) => (
               <tr key={product.id}>
                 <td>
-                  <Link
-                    href={`/products/${product.id}`}
-                    className="font-semibold text-forest hover:underline"
-                  >
-                    {product.name}
-                  </Link>
-                  <p className="text-xs text-muted">{product.slug}</p>
+                  <div className="flex items-center gap-3">
+                    {product.image ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={product.image}
+                        alt=""
+                        className="h-12 w-12 rounded-lg object-cover"
+                      />
+                    ) : (
+                      <div className="h-12 w-12 rounded-lg bg-cream-strong" />
+                    )}
+                    <div>
+                      <Link
+                        href={`/products/${product.id}`}
+                        className="font-semibold text-forest hover:underline"
+                      >
+                        {product.name}
+                      </Link>
+                      <p className="text-xs text-muted">{product.slug}</p>
+                    </div>
+                  </div>
                 </td>
                 <td>{product.category}</td>
                 <td>

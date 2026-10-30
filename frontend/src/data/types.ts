@@ -17,6 +17,7 @@ export type Product = {
   badges?: string[];
   variants: ProductVariant[];
   accent: "ghee" | "oil" | "powder" | "seed" | "makhana";
+  image?: string | null;
 };
 
 export function formatInr(amount: number) {

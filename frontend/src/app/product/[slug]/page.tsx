@@ -12,6 +12,8 @@ const FALLBACK_SLUGS = [
   "cold-pressed-coconut-oil",
   "organic-moringa-powder",
   "organic-ashwagandha-powder",
+  "organic-shatavari-powder",
+  "pumpkin-seeds",
   "organic-makhana",
 ];
 

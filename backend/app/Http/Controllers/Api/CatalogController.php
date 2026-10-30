@@ -66,6 +66,8 @@ class CatalogController extends Controller
             'category_slug' => $p->category?->slug,
             'badges' => $p->badges ?? [],
             'accent' => $p->accent,
+            'image' => $p->image ? '/'.$p->image : null,
+            'image_url' => $p->image ? url('/'.$p->image) : null,
             'price_from_inr' => $from?->price_inr,
             'from_label' => $from?->label,
         ];

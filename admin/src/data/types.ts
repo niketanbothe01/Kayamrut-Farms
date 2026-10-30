@@ -56,6 +56,7 @@ export type AdminProduct = {
   name: string;
   category: string;
   status: "draft" | "active" | "archived";
+  image?: string | null;
   priceFromInr: number;
   stockTotal: number;
   updatedAt: string;

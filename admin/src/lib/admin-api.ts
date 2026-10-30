@@ -151,6 +151,7 @@ export async function fetchAdminProducts(): Promise<AdminProduct[]> {
       name: string;
       category: string | null;
       status: AdminProduct["status"];
+      image: string | null;
       price_from_inr: number | null;
       stock_total: number;
       updated_at: string | null;
@@ -162,6 +163,7 @@ export async function fetchAdminProducts(): Promise<AdminProduct[]> {
     name: p.name,
     category: p.category ?? "",
     status: p.status,
+    image: p.image,
     priceFromInr: p.price_from_inr ?? 0,
     stockTotal: p.stock_total,
     updatedAt: p.updated_at ?? "",

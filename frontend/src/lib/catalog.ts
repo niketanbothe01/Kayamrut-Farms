@@ -17,6 +17,8 @@ type ApiProductCard = {
   category_slug: string | null;
   badges: string[];
   accent: Product["accent"] | null;
+  image: string | null;
+  image_url: string | null;
   price_from_inr: number | null;
   from_label: string | null;
 };
@@ -79,6 +81,7 @@ function mapCard(p: ApiProductCard): Product {
     description: "",
     badges: p.badges ?? [],
     accent: mapAccent(p.accent),
+    image: p.image,
     variants: mapVariants(undefined, p.price_from_inr, p.from_label),
   };
 }

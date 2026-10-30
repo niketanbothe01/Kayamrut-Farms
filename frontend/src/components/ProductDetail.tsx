@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { formatInr, type Product } from "@/data/types";
@@ -36,10 +37,20 @@ export function ProductDetail({ slug }: { slug: string }) {
 
   return (
     <div className="mt-6 grid gap-8 lg:grid-cols-2 lg:gap-12">
-      <div
-        className="accent-swatch min-h-80 rounded-[calc(var(--radius)+0.15rem)]"
-        data-accent={product.accent}
-      />
+      <div className="relative min-h-80 overflow-hidden rounded-[calc(var(--radius)+0.15rem)] bg-cream-strong">
+        {product.image ? (
+          <Image
+            src={product.image}
+            alt={product.name}
+            fill
+            className="object-cover"
+            sizes="(max-width: 1024px) 100vw, 50vw"
+            priority
+          />
+        ) : (
+          <div className="accent-swatch h-full min-h-80 w-full" data-accent={product.accent} />
+        )}
+      </div>
 
       <div>
         <p className="text-xs font-semibold uppercase tracking-[0.18em] text-gold-ink">

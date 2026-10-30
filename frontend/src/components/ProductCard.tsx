@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { formatInr, type Product } from "@/data/types";
 
@@ -10,10 +11,18 @@ export function ProductCard({ product }: { product: Product }) {
       href={`/product/${product.slug}`}
       className="surface-card group flex flex-col overflow-hidden transition-[border-color,box-shadow] hover:border-forest/25"
     >
-      <div
-        className="accent-swatch relative aspect-[4/3] w-full"
-        data-accent={product.accent}
-      >
+      <div className="relative aspect-[4/3] w-full overflow-hidden bg-cream-strong">
+        {product.image ? (
+          <Image
+            src={product.image}
+            alt={product.name}
+            fill
+            className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+            sizes="(max-width: 768px) 100vw, 25vw"
+          />
+        ) : (
+          <div className="accent-swatch h-full w-full" data-accent={product.accent} />
+        )}
         <div className="absolute inset-0 flex items-end p-4">
           <span className="rounded-full bg-cream/95 px-3 py-1 text-xs font-semibold text-forest">
             {product.category}
