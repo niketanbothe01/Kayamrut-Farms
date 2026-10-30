@@ -353,9 +353,7 @@ Admin UI may use denser components; **storefront** should follow brand visual ru
 
 ### Still open
 
-2. **Admin implementation:**  
-   - **A (recommended):** separate Next.js `admin/` talking to Laravel JSON API (CF Pages-friendly, matches scaffold)  
-   - **B:** Laravel **Filament** (or Nova) served from `backend` — faster CRUD MVP, weaker CF Pages story for admin  
+2. **Admin implementation:** **A chosen in practice** — separate Next.js `admin/` (fixture UI started) talking to Laravel JSON API. Filament/Nova deferred.  
 4. **Cloudflare purity:** confirm hybrid is OK (UI on CF, API off-CF).  
 5. **Payments:** Razorpay (DX default) vs **Cashfree / PhonePe** (often slightly cheaper public fees) — confirm; UPI fee in writing before prod.  
 6. **Guest checkout:** allow without account? (recommended: yes)  

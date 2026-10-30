@@ -1,0 +1,197 @@
+@import "tailwindcss";
+
+:root {
+  --forest: #1a3a2a;
+  --forest-deep: #102418;
+  --forest-soft: #2a5240;
+  --gold: #c4a35a;
+  --gold-bright: #e0c07a;
+  --gold-ink: #6b5420;
+  --cream: #f4f1ea;
+  --panel: #fffdf8;
+  --ink: #142018;
+  --muted: #5c6b62;
+  --line: color-mix(in oklab, var(--forest) 14%, transparent);
+  --danger: #9b2c2c;
+  --warn: #9a6b16;
+  --ok: #1f6b3a;
+  --background: var(--cream);
+  --foreground: var(--ink);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-forest: var(--forest);
+  --color-forest-deep: var(--forest-deep);
+  --color-forest-soft: var(--forest-soft);
+  --color-gold: var(--gold);
+  --color-gold-bright: var(--gold-bright);
+  --color-gold-ink: var(--gold-ink);
+  --color-cream: var(--cream);
+  --color-panel: var(--panel);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-danger: var(--danger);
+  --color-warn: var(--warn);
+  --color-ok: var(--ok);
+  --font-sans: var(--font-body);
+  --font-display: var(--font-display);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100%;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-body), system-ui, sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.font-display {
+  font-family: var(--font-display), Georgia, serif;
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 0.75rem;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  min-height: 2.4rem;
+  padding: 0.45rem 1rem;
+  border-radius: 0.55rem;
+  border: 1px solid transparent;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.btn-primary {
+  background: var(--forest);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--forest-soft);
+}
+
+.btn-ghost {
+  background: transparent;
+  border-color: var(--line);
+  color: var(--forest);
+}
+
+.btn-ghost:hover {
+  background: color-mix(in oklab, var(--forest) 6%, white);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.field label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.field input,
+.field select,
+.field textarea {
+  min-height: 2.5rem;
+  border: 1px solid var(--line);
+  border-radius: 0.55rem;
+  padding: 0.55rem 0.75rem;
+  background: white;
+  color: var(--ink);
+  font: inherit;
+}
+
+.field textarea {
+  min-height: 6rem;
+  resize: vertical;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 0.15rem 0.55rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.badge-active,
+.badge-paid,
+.badge-delivered {
+  background: color-mix(in oklab, var(--ok) 16%, white);
+  color: var(--ok);
+}
+
+.badge-draft,
+.badge-pending {
+  background: color-mix(in oklab, var(--warn) 18%, white);
+  color: var(--warn);
+}
+
+.badge-archived,
+.badge-cancelled {
+  background: color-mix(in oklab, var(--danger) 14%, white);
+  color: var(--danger);
+}
+
+.badge-processing,
+.badge-shipped {
+  background: color-mix(in oklab, var(--forest) 12%, white);
+  color: var(--forest);
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+table.data {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+table.data th {
+  text-align: left;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--line);
+}
+
+table.data td {
+  padding: 0.9rem 1rem;
+  border-bottom: 1px solid var(--line);
+  vertical-align: middle;
+}
+
+table.data tr:hover td {
+  background: color-mix(in oklab, var(--forest) 3%, white);
+}
