@@ -10,7 +10,10 @@ From repo root:
 docker compose up -d --build
 ```
 
-API: http://localhost:8080  
+API base: http://localhost:8080  
+
+Opening `/` in a browser returns a small JSON index (this is **not** a Laravel dashboard).  
+UIs live on the Next apps: storefront `:3000`, admin `:3001`.
 
 Health: `GET /api/health`  
 Catalog: `GET /api/products`  

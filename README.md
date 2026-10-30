@@ -17,16 +17,23 @@ Monorepo for Kayamrut Farms — organic superfoods ecommerce.
 ## Quick start
 
 ```bash
-# API + MySQL
+# API + MySQL (JSON only — no Laravel UI)
 make up
+# → http://localhost:8080/          (API index JSON)
 # → http://localhost:8080/api/health
 
-# Storefront
+# Storefront UI
 cd frontend && npm install && npm run dev   # :3000
 
-# Admin
+# Admin UI
 cd admin && npm install && npm run dev     # :3001
 ```
+
+| Port | What you see |
+| --- | --- |
+| `:3000` | Forest Gold storefront |
+| `:3001` | Ops admin |
+| `:8080` | Laravel **API** (JSON). Opening `/` is not a dashboard. |
 
 Admin API login: `admin@kayamrut.local` / `password`  
 
