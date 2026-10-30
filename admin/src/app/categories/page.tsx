@@ -1,18 +1,32 @@
-import { AdminShell } from "@/components/AdminShell";
-import { categories } from "@/data/fixtures";
+"use client";
 
-export const metadata = { title: "Categories" };
+import { useEffect, useState } from "react";
+import { AdminShell } from "@/components/AdminShell";
+import type { AdminCategory } from "@/data/types";
+import { fetchAdminCategories } from "@/lib/admin-api";
 
 export default function CategoriesPage() {
-  return (
-    <AdminShell
-      title="Categories"
-      actions={
-        <button type="button" className="btn btn-primary">
-          Add category
-        </button>
+  const [categories, setCategories] = useState<AdminCategory[]>([]);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const list = await fetchAdminCategories();
+        if (!cancelled) setCategories(list);
+      } catch {
+        if (!cancelled) setError("Failed to load categories.");
       }
-    >
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  return (
+    <AdminShell title="Categories">
+      {error ? <p className="mb-3 text-sm text-warn">{error}</p> : null}
       <div className="panel table-wrap">
         <table className="data">
           <thead>
@@ -32,12 +46,16 @@ export default function CategoriesPage() {
                 <td>{category.visible ? "Yes" : "No"}</td>
               </tr>
             ))}
+            {!categories.length && !error ? (
+              <tr>
+                <td colSpan={4} className="py-8 text-center text-muted">
+                  Loading…
+                </td>
+              </tr>
+            ) : null}
           </tbody>
         </table>
       </div>
-      <p className="mt-3 text-xs text-muted">
-        Needed APIs: <code>GET/POST/PATCH /api/admin/categories</code>, sort order, visibility.
-      </p>
     </AdminShell>
   );
 }

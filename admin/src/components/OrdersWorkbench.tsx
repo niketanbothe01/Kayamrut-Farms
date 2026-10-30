@@ -8,7 +8,8 @@ import {
   type FulfillmentStatus,
   formatInr,
   PACK_PIPELINE,
-} from "@/data/fixtures";
+} from "@/data/types";
+import { bulkUpdateOrders, fetchAdminOrders } from "@/lib/admin-api";
 
 const FILTERS: { id: "all" | "needs_action" | FulfillmentStatus; label: string }[] = [
   { id: "all", label: "All" },
@@ -30,6 +31,7 @@ export function OrdersWorkbench({ initialOrders }: Props) {
   const [filter, setFilter] = useState<(typeof FILTERS)[number]["id"]>("needs_action");
   const [selected, setSelected] = useState<string[]>([]);
   const [notice, setNotice] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
 
   const visible = useMemo(() => {
     if (filter === "all") return orders;
@@ -60,27 +62,26 @@ export function OrdersWorkbench({ initialOrders }: Props) {
     );
   }
 
-  function applyBulk(next: FulfillmentStatus, label: string) {
+  async function applyBulk(next: FulfillmentStatus) {
     if (selected.length === 0) {
       setNotice("Select at least one order first.");
       return;
     }
-    const now = new Date().toISOString().slice(0, 16).replace("T", " ");
-    setOrders((prev) =>
-      prev.map((order) => {
-        if (!selected.includes(order.id)) return order;
-        if (order.paymentStatus !== "paid" && next !== "cancelled") return order;
-        return {
-          ...order,
-          fulfillmentStatus: next,
-          timeline: [...order.timeline, { at: now, label }],
-        };
-      }),
-    );
-    setNotice(
-      `Updated ${selected.length} order(s) → ${FULFILLMENT_LABELS[next]} (local fixture demo). API: POST /api/admin/orders/bulk`,
-    );
-    setSelected([]);
+    setBusy(true);
+    setNotice(null);
+    try {
+      const result = await bulkUpdateOrders(selected, next);
+      const refreshed = await fetchAdminOrders();
+      setOrders(refreshed);
+      setNotice(
+        `Updated ${result.updated} order(s) → ${FULFILLMENT_LABELS[next]}`,
+      );
+      setSelected([]);
+    } catch {
+      setNotice("Bulk update failed — check API / auth.");
+    } finally {
+      setBusy(false);
+    }
   }
 
   function count(status: FulfillmentStatus | "needs_action") {
@@ -136,37 +137,40 @@ export function OrdersWorkbench({ initialOrders }: Props) {
         <button
           type="button"
           className="btn btn-primary"
-          onClick={() => applyBulk("packing", "Bulk: packing started")}
+          disabled={busy}
+          onClick={() => applyBulk("packing")}
         >
           Start packing
         </button>
         <button
           type="button"
           className="btn btn-ghost"
-          onClick={() => applyBulk("ready_to_ship", "Bulk: marked ready to ship")}
+          disabled={busy}
+          onClick={() => applyBulk("ready_to_ship")}
         >
           Mark ready to ship
         </button>
         <button
           type="button"
           className="btn btn-ghost"
-          onClick={() => applyBulk("shipped", "Bulk: marked shipped (add AWB on detail)")}
+          disabled={busy}
+          onClick={() => applyBulk("shipped")}
         >
           Mark shipped
         </button>
         <button
           type="button"
           className="btn btn-ghost"
-          onClick={() =>
-            applyBulk("out_for_delivery", "Bulk: out for delivery")
-          }
+          disabled={busy}
+          onClick={() => applyBulk("out_for_delivery")}
         >
           Out for delivery
         </button>
         <button
           type="button"
           className="btn btn-ghost"
-          onClick={() => applyBulk("delivered", "Bulk: delivered")}
+          disabled={busy}
+          onClick={() => applyBulk("delivered")}
         >
           Mark delivered
         </button>

@@ -32,10 +32,10 @@ export default function ContentPage() {
             <h2 className="font-display text-xl text-forest">{card.title}</h2>
             <p className="mt-2 text-sm text-muted">{card.body}</p>
             <p className="mt-4 text-xs text-gold-ink">
-              <code>{card.api}</code>
+              Pending API · <code>{card.api}</code>
             </p>
-            <button type="button" className="btn btn-ghost mt-4">
-              Edit (soon)
+            <button type="button" className="btn btn-ghost mt-4" disabled>
+              Coming with CMS slice
             </button>
           </section>
         ))}

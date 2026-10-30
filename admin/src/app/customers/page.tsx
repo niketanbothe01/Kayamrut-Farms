@@ -1,34 +1,32 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import { AdminShell } from "@/components/AdminShell";
-
-export const metadata = { title: "Customers" };
-
-const customers = [
-  {
-    id: "u1",
-    name: "Ananya Shah",
-    email: "ananya@example.com",
-    orders: 3,
-    spentInr: "₹4,280",
-  },
-  {
-    id: "u2",
-    name: "Rohit Mehta",
-    email: "rohit@example.com",
-    orders: 1,
-    spentInr: "₹1,248",
-  },
-  {
-    id: "u3",
-    name: "Neha Iyer",
-    email: "neha@example.com",
-    orders: 2,
-    spentInr: "₹2,110",
-  },
-];
+import { formatInr, type AdminCustomer } from "@/data/types";
+import { fetchAdminCustomers } from "@/lib/admin-api";
 
 export default function CustomersPage() {
+  const [customers, setCustomers] = useState<AdminCustomer[]>([]);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const list = await fetchAdminCustomers();
+        if (!cancelled) setCustomers(list);
+      } catch {
+        if (!cancelled) setError("Failed to load customers.");
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   return (
     <AdminShell title="Customers">
+      {error ? <p className="mb-3 text-sm text-warn">{error}</p> : null}
       <div className="panel table-wrap">
         <table className="data">
           <thead>
@@ -45,16 +43,19 @@ export default function CustomersPage() {
                 <td className="font-semibold text-forest">{c.name}</td>
                 <td>{c.email}</td>
                 <td>{c.orders}</td>
-                <td>{c.spentInr}</td>
+                <td>{formatInr(c.spentInr)}</td>
               </tr>
             ))}
+            {!customers.length && !error ? (
+              <tr>
+                <td colSpan={4} className="py-8 text-center text-muted">
+                  Loading…
+                </td>
+              </tr>
+            ) : null}
           </tbody>
         </table>
       </div>
-      <p className="mt-3 text-xs text-muted">
-        Needed APIs: <code>GET /api/admin/customers</code>, detail with addresses + order
-        history. Guest checkouts may have email-only records.
-      </p>
     </AdminShell>
   );
 }

@@ -7,13 +7,14 @@ import {
   type AdminOrder,
   type FulfillmentStatus,
   formatInr,
-} from "@/data/fixtures";
+} from "@/data/types";
+import { patchAdminOrder, patchShipment } from "@/lib/admin-api";
 
 type Props = { order: AdminOrder };
 
 export function OrderFulfillmentPanel({ order: initial }: Props) {
   const [order, setOrder] = useState(initial);
-  const [carrier, setCarrier] = useState(order.shipment?.carrier ?? "Delhivery");
+  const [carrier, setCarrier] = useState(order.shipment?.carrier || "Delhivery");
   const [trackingNumber, setTrackingNumber] = useState(
     order.shipment?.trackingNumber ?? "",
   );
@@ -22,78 +23,51 @@ export function OrderFulfillmentPanel({ order: initial }: Props) {
   );
   const [packingNotes, setPackingNotes] = useState(order.packingNotes ?? "");
   const [message, setMessage] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
 
   const stepIndex = useMemo(() => {
-    const idx = FULFILLMENT_STEPS.indexOf(order.fulfillmentStatus);
-    return idx;
+    return FULFILLMENT_STEPS.indexOf(order.fulfillmentStatus);
   }, [order.fulfillmentStatus]);
 
-  function stamp(label: string) {
-    return {
-      at: new Date().toISOString().slice(0, 16).replace("T", " "),
-      label,
-    };
+  async function setStatus(next: FulfillmentStatus) {
+    setBusy(true);
+    setMessage(null);
+    try {
+      const updated = await patchAdminOrder(order.id, {
+        fulfillment_status: next,
+        packing_notes: packingNotes,
+      });
+      setOrder(updated);
+      setMessage(`Saved: ${FULFILLMENT_LABELS[next]}`);
+    } catch {
+      setMessage("Status update failed.");
+    } finally {
+      setBusy(false);
+    }
   }
 
-  function setStatus(next: FulfillmentStatus, label: string) {
-    setOrder((prev) => ({
-      ...prev,
-      fulfillmentStatus: next,
-      timeline: [...prev.timeline, stamp(label)],
-      shipment:
-        next === "shipped" ||
-        next === "out_for_delivery" ||
-        next === "delivered"
-          ? {
-              carrier,
-              trackingNumber: trackingNumber || prev.shipment?.trackingNumber || "PENDING",
-              shippedAt:
-                prev.shipment?.shippedAt ||
-                (next === "shipped"
-                  ? new Date().toISOString().slice(0, 10)
-                  : undefined),
-              estimatedDelivery: estimatedDelivery || prev.shipment?.estimatedDelivery,
-              deliveredAt:
-                next === "delivered"
-                  ? new Date().toISOString().slice(0, 16).replace("T", " ")
-                  : prev.shipment?.deliveredAt,
-            }
-          : prev.shipment,
-      packingNotes,
-    }));
-    setMessage(
-      `Saved locally: ${FULFILLMENT_LABELS[next]}. Will call PATCH /api/admin/orders/${order.id} + shipment fields.`,
-    );
-  }
-
-  function saveShipment() {
+  async function saveShipment() {
     if (!trackingNumber.trim()) {
       setMessage("Add a tracking / AWB number before saving shipment.");
       return;
     }
-    setOrder((prev) => ({
-      ...prev,
-      fulfillmentStatus:
-        prev.fulfillmentStatus === "ready_to_ship" ||
-        prev.fulfillmentStatus === "packing" ||
-        prev.fulfillmentStatus === "to_pack"
-          ? "shipped"
-          : prev.fulfillmentStatus,
-      shipment: {
+    setBusy(true);
+    setMessage(null);
+    try {
+      await patchAdminOrder(order.id, { packing_notes: packingNotes });
+      const updated = await patchShipment(order.id, {
         carrier,
-        trackingNumber: trackingNumber.trim(),
-        estimatedDelivery: estimatedDelivery || undefined,
-        shippedAt:
-          prev.shipment?.shippedAt || new Date().toISOString().slice(0, 10),
-        deliveredAt: prev.shipment?.deliveredAt,
-      },
-      packingNotes,
-      timeline: [
-        ...prev.timeline,
-        stamp(`Shipment updated · ${carrier} · ${trackingNumber.trim()}`),
-      ],
-    }));
-    setMessage("Shipment details saved (fixture). API: PATCH .../shipment");
+        tracking_number: trackingNumber.trim(),
+        estimated_delivery: estimatedDelivery || undefined,
+        mark_shipped: true,
+      });
+      setOrder(updated);
+      setMessage("Shipment saved and marked shipped.");
+    } catch {
+      setMessage("Shipment update failed.");
+    } finally {
+      setBusy(false);
+    }
   }
 
   const canFulfill = order.paymentStatus === "paid";
@@ -144,46 +118,22 @@ export function OrderFulfillmentPanel({ order: initial }: Props) {
             </p>
           ) : (
             <div className="mt-5 flex flex-wrap gap-2">
-              <button
-                type="button"
-                className="btn btn-primary"
-                onClick={() => setStatus("packing", "Packing started")}
-              >
+              <button type="button" className="btn btn-primary" disabled={busy} onClick={() => setStatus("packing")}>
                 Start packing
               </button>
-              <button
-                type="button"
-                className="btn btn-ghost"
-                onClick={() => setStatus("ready_to_ship", "Marked ready to ship")}
-              >
+              <button type="button" className="btn btn-ghost" disabled={busy} onClick={() => setStatus("ready_to_ship")}>
                 Ready to ship
               </button>
-              <button
-                type="button"
-                className="btn btn-ghost"
-                onClick={() => setStatus("shipped", "Marked shipped")}
-              >
+              <button type="button" className="btn btn-ghost" disabled={busy} onClick={() => setStatus("shipped")}>
                 Mark shipped
               </button>
-              <button
-                type="button"
-                className="btn btn-ghost"
-                onClick={() => setStatus("out_for_delivery", "Out for delivery")}
-              >
+              <button type="button" className="btn btn-ghost" disabled={busy} onClick={() => setStatus("out_for_delivery")}>
                 Out for delivery
               </button>
-              <button
-                type="button"
-                className="btn btn-ghost"
-                onClick={() => setStatus("delivered", "Delivered to customer")}
-              >
+              <button type="button" className="btn btn-ghost" disabled={busy} onClick={() => setStatus("delivered")}>
                 Mark delivered
               </button>
-              <button
-                type="button"
-                className="btn btn-ghost"
-                onClick={() => setStatus("cancelled", "Order cancelled")}
-              >
+              <button type="button" className="btn btn-ghost" disabled={busy} onClick={() => setStatus("cancelled")}>
                 Cancel order
               </button>
             </div>
@@ -240,7 +190,12 @@ export function OrderFulfillmentPanel({ order: initial }: Props) {
               />
             </div>
           </div>
-          <button type="button" className="btn btn-primary mt-4" onClick={saveShipment}>
+          <button
+            type="button"
+            className="btn btn-primary mt-4"
+            disabled={busy}
+            onClick={saveShipment}
+          >
             Save shipment & mark shipped
           </button>
         </section>
@@ -285,7 +240,7 @@ export function OrderFulfillmentPanel({ order: initial }: Props) {
         <section className="panel p-5">
           <h2 className="font-display text-xl text-forest">Timeline</h2>
           <ol className="mt-4 space-y-3">
-            {[...order.timeline].reverse().map((event, i) => (
+            {[...order.timeline].map((event, i) => (
               <li key={`${event.at}-${i}`} className="border-l-2 border-forest/30 pl-3">
                 <p className="text-sm font-semibold text-forest">{event.label}</p>
                 <p className="text-xs text-muted">{event.at}</p>

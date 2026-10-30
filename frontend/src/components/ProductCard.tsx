@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { formatInr, type Product } from "@/data/products";
+import { formatInr, type Product } from "@/data/types";
 
 export function ProductCard({ product }: { product: Product }) {
   const variant = product.variants[0];
@@ -29,16 +29,14 @@ export function ProductCard({ product }: { product: Product }) {
         <h3 className="font-display text-xl text-forest group-hover:text-forest-soft">
           {product.name}
         </h3>
-        <p className="text-sm leading-relaxed text-muted">{product.tagline}</p>
-        <div className="mt-auto flex items-center justify-between pt-3">
-          <p className="text-sm font-semibold text-ink">
-            From {formatInr(variant.priceInr)}
-            <span className="ml-1 font-normal text-muted">· {variant.label}</span>
-          </p>
-          <span className="text-sm font-semibold text-gold-ink">
-            {soldOut ? "Sold out" : "View"}
-          </span>
-        </div>
+        <p className="line-clamp-2 text-sm text-muted">{product.tagline}</p>
+        <p className="mt-auto pt-2 text-sm font-semibold text-forest">
+          {soldOut
+            ? "Sold out"
+            : variant
+              ? `From ${formatInr(variant.priceInr)}`
+              : "View options"}
+        </p>
       </div>
     </Link>
   );

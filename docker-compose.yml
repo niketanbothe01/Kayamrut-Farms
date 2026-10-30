@@ -1,0 +1,59 @@
+# Lean local stack: Laravel API + MySQL (+ Redis optional later)
+#   docker compose up -d --build
+#   docker compose exec api php artisan migrate --seed
+#
+# API: http://localhost:8080
+
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: kayamrut-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: kayamrut
+      MYSQL_USER: kayamrut
+      MYSQL_PASSWORD: kayamrut
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3307:3306"
+    volumes:
+      - kayamrut_mysql:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-proot"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: kayamrut-api
+    restart: unless-stopped
+    working_dir: /var/www/html
+    volumes:
+      - ./backend:/var/www/html
+    ports:
+      - "8080:8000"
+    environment:
+      APP_ENV: local
+      APP_DEBUG: "true"
+      APP_URL: http://localhost:8080
+      DB_CONNECTION: mysql
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_DATABASE: kayamrut
+      DB_USERNAME: kayamrut
+      DB_PASSWORD: kayamrut
+      CACHE_STORE: database
+      QUEUE_CONNECTION: database
+      SESSION_DRIVER: database
+    depends_on:
+      mysql:
+        condition: service_healthy
+    command: >
+      sh -c "php artisan migrate --force --seed &&
+             php artisan serve --host=0.0.0.0 --port=8000"
+
+volumes:
+  kayamrut_mysql:

@@ -39,4 +39,12 @@ Later: point a custom domain at CF; CNAME `api.` to Railway.
 
 1. Change frontend/admin locally → push branch → Pages updates.  
 2. Change Laravel → push → Railway updates.  
-3. Wire fetch/`NEXT_PUBLIC_API_URL` in the Next apps; no re-setup of CF projects.
+3. Set `NEXT_PUBLIC_API_URL` on both Pages projects (and local `.env.local`) to the public API base ending in `/api`.
+
+## Local API
+
+```bash
+make up   # http://localhost:8080/api/health
+```
+
+Storefront + admin already call the Laravel API (catalog, admin auth, products, orders, customers). CMS endpoints still pending.

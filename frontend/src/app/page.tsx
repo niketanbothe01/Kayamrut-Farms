@@ -1,11 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ProductCard } from "@/components/ProductCard";
-import { products } from "@/data/products";
+import { FeaturedProducts } from "@/components/FeaturedProducts";
 
 export default function HomePage() {
-  const featured = products.slice(0, 4);
-
   return (
     <>
       <section className="relative isolate min-h-[78vh] overflow-hidden bg-forest-deep text-cream">
@@ -54,11 +51,7 @@ export default function HomePage() {
             View all →
           </Link>
         </div>
-        <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {featured.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </div>
+        <FeaturedProducts />
       </section>
 
       <section className="border-y border-line bg-cream-strong">

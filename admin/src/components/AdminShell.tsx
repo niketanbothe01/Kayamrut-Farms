@@ -24,7 +24,7 @@ export function AdminShell({
         <div className="px-5 py-5">
           <p className="font-display text-xl text-cream">Kayamrut Admin</p>
           <p className="mt-1 text-[0.7rem] uppercase tracking-[0.16em] text-gold">
-            Forest Gold · ops
+            Forest Gold · live API
           </p>
         </div>
         <nav className="flex gap-1 overflow-x-auto px-3 pb-4 md:flex-col md:overflow-visible">
@@ -39,7 +39,7 @@ export function AdminShell({
           ))}
         </nav>
         <div className="hidden px-5 pb-6 text-xs text-cream/50 md:block">
-          Fixture UI — APIs come next. Auth not wired yet.
+          Sanctum admin token · data from Laravel
         </div>
       </aside>
 

@@ -1,10 +1,30 @@
-import Link from "next/link";
-import { AdminShell } from "@/components/AdminShell";
-import { formatInr, products } from "@/data/fixtures";
+"use client";
 
-export const metadata = { title: "Products" };
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { AdminShell } from "@/components/AdminShell";
+import { formatInr, type AdminProduct } from "@/data/types";
+import { fetchAdminProducts } from "@/lib/admin-api";
 
 export default function ProductsPage() {
+  const [products, setProducts] = useState<AdminProduct[]>([]);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const list = await fetchAdminProducts();
+        if (!cancelled) setProducts(list);
+      } catch {
+        if (!cancelled) setError("Failed to load products.");
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   return (
     <AdminShell
       title="Products"
@@ -14,6 +34,7 @@ export default function ProductsPage() {
         </Link>
       }
     >
+      {error ? <p className="mb-3 text-sm text-warn">{error}</p> : null}
       <div className="panel table-wrap">
         <table className="data">
           <thead>
@@ -51,6 +72,13 @@ export default function ProductsPage() {
                 <td className="text-muted">{product.updatedAt}</td>
               </tr>
             ))}
+            {!products.length && !error ? (
+              <tr>
+                <td colSpan={6} className="py-8 text-center text-muted">
+                  Loading…
+                </td>
+              </tr>
+            ) : null}
           </tbody>
         </table>
       </div>

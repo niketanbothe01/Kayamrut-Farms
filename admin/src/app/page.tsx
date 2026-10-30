@@ -1,26 +1,55 @@
+"use client";
+
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { AdminShell } from "@/components/AdminShell";
-import { formatInr, orders, products } from "@/data/fixtures";
+import { formatInr, type AdminOrder, type AdminProduct, type DashboardStats } from "@/data/types";
+import { fetchAdminOrders, fetchAdminProducts, fetchDashboard } from "@/lib/admin-api";
 
 export default function DashboardPage() {
-  const activeProducts = products.filter((p) => p.status === "active").length;
-  const lowStock = products.filter((p) => p.stockTotal > 0 && p.stockTotal < 20).length;
-  const openOrders = orders.filter((o) =>
-    ["to_pack", "packing", "ready_to_ship", "shipped", "out_for_delivery"].includes(
-      o.fulfillmentStatus,
-    ),
-  ).length;
-  const revenue = orders
-    .filter((o) => o.paymentStatus === "paid")
-    .reduce((sum, o) => sum + o.totalInr, 0);
+  const [stats, setStats] = useState<DashboardStats | null>(null);
+  const [orders, setOrders] = useState<AdminOrder[]>([]);
+  const [products, setProducts] = useState<AdminProduct[]>([]);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const [dashboard, orderList, productList] = await Promise.all([
+          fetchDashboard(),
+          fetchAdminOrders(),
+          fetchAdminProducts(),
+        ]);
+        if (!cancelled) {
+          setStats(dashboard);
+          setOrders(orderList);
+          setProducts(productList);
+        }
+      } catch {
+        if (!cancelled) setError("Failed to load dashboard from API.");
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   return (
     <AdminShell title="Dashboard">
+      {error ? <p className="mb-4 text-sm text-warn">{error}</p> : null}
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <Stat label="Active products" value={String(activeProducts)} />
-        <Stat label="Open orders" value={String(openOrders)} />
-        <Stat label="Low stock SKUs" value={String(lowStock)} tone="warn" />
-        <Stat label="Paid GMV (fixture)" value={formatInr(revenue)} />
+        <Stat label="Active products" value={stats ? String(stats.activeProducts) : "—"} />
+        <Stat label="Open orders" value={stats ? String(stats.openOrders) : "—"} />
+        <Stat
+          label="Low stock SKUs"
+          value={stats ? String(stats.lowStockSkus) : "—"}
+          tone="warn"
+        />
+        <Stat
+          label="Paid GMV"
+          value={stats ? formatInr(stats.paidGmvInr) : "—"}
+        />
       </div>
 
       <div className="mt-6 grid gap-4 lg:grid-cols-2">
@@ -56,6 +85,9 @@ export default function DashboardPage() {
                 </div>
               </li>
             ))}
+            {!orders.length && !error ? (
+              <li className="text-sm text-muted">Loading…</li>
+            ) : null}
           </ul>
         </section>
 
