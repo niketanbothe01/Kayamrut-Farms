@@ -6,6 +6,7 @@ const links = [
   { href: "/shop?category=a2-ghee", label: "Ghee" },
   { href: "/shop?category=cold-pressed", label: "Oils" },
   { href: "/about", label: "Our story" },
+  { href: "/account", label: "Account" },
 ];
 
 export function SiteHeader() {
