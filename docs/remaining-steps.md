@@ -1,40 +1,47 @@
 # What’s done vs still remaining
 
-## Polished locally (this pass)
+## Live on production
 
-- 8 catalog products with photos in DB + `public/products/`
-- Richer seed: powders (moringa/ashwa/shatavari), seeds, makhana, 4 demo orders
-- Storefront cards/PDP show real images from API
-- Admin product list shows thumbnails
-- Storefront + admin call Laravel (`NEXT_PUBLIC_API_URL`)
+| Piece | URL |
+| --- | --- |
+| Storefront | https://kayamrutfarms.in |
+| Admin | https://admin.kayamrutfarms.in |
+| API (tunnel) | https://api.kayamrutfarms.in |
+| SSL | Cloudflare Universal SSL |
 
-**Local run**
+## Built in this commerce pass
 
-```bash
-make up
-cd frontend && npm run dev   # :3000
-cd admin && npm run dev      # :3001
-# admin login: admin@kayamrut.local / password
-```
+- Guest cart (localStorage) + PDP add-to-cart
+- Checkout → `POST /api/checkout` (COD + prepaid placeholder)
+- Order confirm page (`/order/confirm`)
+- Customer register/login API + `/account` UI
+- Admin product image upload (`POST /api/admin/products/{id}/image`)
+- Admin password via `ADMIN_PASSWORD` env on seed
 
 ## Still remaining (honest)
 
 | Area | Status |
 | --- | --- |
-| Cart / checkout / payment webhooks | Not built |
-| CMS APIs (home/about/testimonials) | UI shell only |
-| Image upload in admin | Seeded files only; no upload UI |
-| Customer auth / accounts | Not built |
-| Admin Pages on Cloudflare | Create project (`/admin`, `out`) |
-| Railway API host | Blocked until Railway is up |
-| CF env `NEXT_PUBLIC_API_URL` | Needed when API is public (pages.dev can’t use localhost) |
-| Custom domain | Optional later |
-| Point CF Pages branch to `cursor/api-integration-4b1a` | So live site gets this polish |
+| Razorpay / Cashfree webhooks | Prepaid flag only — wire keys next |
+| Order email notifications | Not sent yet |
+| `@kayamrutfarms.in` mailbox | Add MX at Cloudflare / Hostinger Email |
+| CMS home/about APIs | Admin content shell still placeholder |
+| Customer order history UI | Auth exists; history screen next |
+| Change live admin password | Set `ADMIN_PASSWORD` on VPS `.env` and re-seed admin, or `php artisan tinker` |
 
-## Deploy sequence after Railway returns
+## Local run
 
-1. Deploy Laravel+MySQL on Railway from this repo `backend/`
-2. Set Pages env `NEXT_PUBLIC_API_URL=https://<railway>/api`
-3. Switch/storefront Pages production branch → `cursor/api-integration-4b1a`
-4. Create `kayamrut-admin` Pages project
-5. Then cart/checkout + Razorpay
+```bash
+make up
+cd frontend && npm run dev   # :3000
+cd admin && npm run dev      # :3001
+# admin: admin@kayamrut.local / password (or ADMIN_PASSWORD)
+```
+
+## VPS refresh after pull
+
+```bash
+cd /opt/Kayamrut-Farms
+git pull origin cursor/api-integration-4b1a
+docker compose up -d --build
+```

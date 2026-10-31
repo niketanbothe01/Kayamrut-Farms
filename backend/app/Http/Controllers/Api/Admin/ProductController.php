@@ -92,6 +92,22 @@ class ProductController extends Controller
         return response()->json(['data' => $this->detail($product->fresh(['category', 'variants']))]);
     }
 
+    public function uploadImage(Request $request, Product $product): JsonResponse
+    {
+        $request->validate([
+            'image' => ['required', 'image', 'max:5120'],
+        ]);
+
+        $file = $request->file('image');
+        $filename = $product->slug.'-'.time().'.'.$file->getClientOriginalExtension();
+        $file->move(public_path('products'), $filename);
+
+        $product->image = 'products/'.$filename;
+        $product->save();
+
+        return response()->json(['data' => $this->detail($product->fresh(['category', 'variants']))]);
+    }
+
     private function validated(Request $request, bool $updating = false): array
     {
         return $request->validate([

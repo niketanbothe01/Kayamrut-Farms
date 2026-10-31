@@ -14,6 +14,8 @@ type ProductDetail = {
   description: string | null;
   status: string;
   accent: string | null;
+  image?: string | null;
+  image_url?: string | null;
   variants: {
     id: number;
     sku: string;
@@ -181,6 +183,43 @@ export function ProductEditClient({ id }: { id: string }) {
                   </li>
                 ))}
               </ul>
+            </div>
+          ) : null}
+          {!isNew && product ? (
+            <div className="md:col-span-2 border-t border-line pt-4">
+              <p className="text-sm font-semibold text-forest">Product image</p>
+              {product.image_url ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={product.image_url}
+                  alt={product.name}
+                  className="mt-2 h-28 w-28 rounded-xl object-cover"
+                />
+              ) : (
+                <p className="mt-1 text-sm text-muted">No image yet.</p>
+              )}
+              <input
+                className="mt-3 block w-full text-sm"
+                type="file"
+                accept="image/*"
+                onChange={async (e) => {
+                  const file = e.target.files?.[0];
+                  if (!file) return;
+                  setMessage(null);
+                  const body = new FormData();
+                  body.append("image", file);
+                  try {
+                    const json = await apiFetch<{ data: ProductDetail }>(
+                      `/admin/products/${id}/image`,
+                      { method: "POST", body },
+                    );
+                    setProduct(json.data);
+                    setMessage("Image uploaded.");
+                  } catch {
+                    setMessage("Image upload failed.");
+                  }
+                }}
+              />
             </div>
           ) : null}
         </form>

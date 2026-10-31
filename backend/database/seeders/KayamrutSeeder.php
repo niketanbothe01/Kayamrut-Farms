@@ -13,11 +13,13 @@ class KayamrutSeeder extends Seeder
 {
     public function run(): void
     {
+        $adminPassword = env('ADMIN_PASSWORD', 'password');
+
         User::query()->updateOrCreate(
             ['email' => 'admin@kayamrut.local'],
             [
                 'name' => 'Kayamrut Admin',
-                'password' => Hash::make('password'),
+                'password' => Hash::make($adminPassword),
                 'is_admin' => true,
                 'phone' => '+91 90000 00000',
             ]

@@ -29,4 +29,25 @@ export async function apiGet<T>(path: string, init?: RequestInit): Promise<T> {
   return res.json() as Promise<T>;
 }
 
+export async function apiPost<T>(path: string, body: unknown, init?: RequestInit): Promise<T> {
+  const res = await fetch(`${API_URL}${path.startsWith("/") ? path : `/${path}`}`, {
+    method: "POST",
+    ...init,
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      ...(init?.headers ?? {}),
+    },
+    body: JSON.stringify(body),
+    cache: "no-store",
+  });
+
+  if (!res.ok) {
+    const text = await res.text().catch(() => "");
+    throw new ApiError(res.status, text || res.statusText);
+  }
+
+  return res.json() as Promise<T>;
+}
+
 export { API_URL };

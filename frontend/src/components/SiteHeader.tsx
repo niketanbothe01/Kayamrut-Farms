@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { CartLink } from "@/components/CartLink";
 
 const links = [
   { href: "/shop", label: "Shop" },
@@ -36,9 +37,7 @@ export function SiteHeader() {
           <Link href="/shop" className="btn btn-forest !min-h-10 !px-4 text-sm md:hidden">
             Shop
           </Link>
-          <Link href="/cart" className="btn btn-forest !min-h-10 !px-4 text-sm">
-            Cart
-          </Link>
+          <CartLink />
         </div>
       </div>
     </header>

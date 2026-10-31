@@ -81,7 +81,7 @@ function mapCard(p: ApiProductCard): Product {
     description: "",
     badges: p.badges ?? [],
     accent: mapAccent(p.accent),
-    image: p.image,
+    image: p.image_url ?? p.image,
     variants: mapVariants(undefined, p.price_from_inr, p.from_label),
   };
 }
