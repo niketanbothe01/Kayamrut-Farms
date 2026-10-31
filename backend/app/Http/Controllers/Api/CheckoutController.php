@@ -118,13 +118,16 @@ class CheckoutController extends Controller
 
     private function nextOrderNumber(): string
     {
-        $latest = Order::query()->orderByDesc('id')->value('number');
-        $n = 1000;
-        if (is_string($latest) && preg_match('/KF-(\d+)/', $latest, $m)) {
-            $n = (int) $m[1];
+        // Use max numeric suffix across all orders — ordering by id is wrong when
+        // seed data inserts KF-1004…KF-1001 (highest id can be KF-1001).
+        $max = 1000;
+        foreach (Order::query()->pluck('number') as $number) {
+            if (is_string($number) && preg_match('/KF-(\d+)/', $number, $m)) {
+                $max = max($max, (int) $m[1]);
+            }
         }
 
-        return 'KF-'.($n + 1);
+        return 'KF-'.($max + 1);
     }
 
     private function serialize(Order $order): array
