@@ -30,12 +30,23 @@ export function BrandSplash() {
 
   return (
     <div
-      className={`fixed inset-0 z-[100] grid place-items-center bg-[#f7f3ea] transition-opacity duration-500 ${
+      className={`fixed inset-0 z-[100] grid place-items-center transition-opacity duration-500 ${
         out ? "opacity-0" : "opacity-100"
       }`}
+      style={{
+        background:
+          "radial-gradient(ellipse 90% 70% at 50% 42%, #2a5240 0%, transparent 58%), linear-gradient(165deg, #102418 0%, #1a3a2a 42%, #143026 100%)",
+      }}
       aria-hidden
     >
-      <img src="/brand/mark.gif" alt="" width={200} height={208} className="w-40" />
+      <img
+        src="/brand/mark.gif"
+        alt=""
+        width={200}
+        height={208}
+        className="w-44"
+        style={{ mixBlendMode: "screen" }}
+      />
     </div>
   );
 }
