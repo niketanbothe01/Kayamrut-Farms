@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { CartLink } from "@/components/CartLink";
 
@@ -13,12 +14,22 @@ export function SiteHeader() {
   return (
     <header className="sticky top-0 z-40 border-b border-line bg-cream/90 backdrop-blur-md">
       <div className="container-page flex h-16 items-center justify-between gap-4">
-        <Link href="/" className="group flex flex-col leading-none">
-          <span className="font-display text-lg tracking-wide text-forest md:text-xl">
-            Kayamrut Farms
-          </span>
-          <span className="text-[0.65rem] uppercase tracking-[0.18em] text-muted">
-            Organic · Herbal · Pure
+        <Link href="/" className="group flex items-center gap-2.5 leading-none">
+          <Image
+            src="/brand/logo.jpg"
+            alt="Kayamrut Farms"
+            width={40}
+            height={42}
+            className="h-10 w-auto rounded-sm object-contain"
+            priority
+          />
+          <span className="flex flex-col">
+            <span className="font-display text-lg tracking-wide text-forest md:text-xl">
+              Kayamrut Farms
+            </span>
+            <span className="text-[0.65rem] uppercase tracking-[0.18em] text-muted">
+              Organic · Herbal · Pure
+            </span>
           </span>
         </Link>
 

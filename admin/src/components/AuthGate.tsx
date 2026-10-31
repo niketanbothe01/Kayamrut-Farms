@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useEffect, useState } from "react";
+import { BrandSplash } from "@/components/BrandSplash";
 import { ApiError } from "@/lib/api";
 import { fetchMe, loginAdmin, logoutAdmin } from "@/lib/admin-api";
 
@@ -60,24 +61,27 @@ export function AuthGate({ children }: { children: React.ReactNode }) {
 
   if (!ready) {
     return (
-      <div className="grid min-h-screen place-items-center bg-cream text-muted">
-        Connecting to API…
-      </div>
+      <>
+        <BrandSplash />
+        <div className="grid min-h-screen place-items-center bg-cream text-muted">
+          Connecting…
+        </div>
+      </>
     );
   }
 
   if (!authed) {
     return (
       <div className="grid min-h-screen place-items-center bg-cream px-4">
+        <BrandSplash />
         <form
           onSubmit={onSubmit}
           className="panel w-full max-w-md space-y-4 p-6 shadow-sm"
         >
-          <div>
-            <p className="font-display text-2xl text-forest">Kayamrut Admin</p>
-            <p className="mt-1 text-sm text-muted">
-              Sign in against the Laravel API (`NEXT_PUBLIC_API_URL`).
-            </p>
+          <div className="flex flex-col items-center text-center">
+            <img src="/brand/logo.jpg" alt="Kayamrut Farms" className="h-16 w-auto" />
+            <p className="font-display mt-3 text-2xl text-forest">Kayamrut Admin</p>
+            <p className="mt-1 text-sm text-muted">Operations panel</p>
           </div>
           <div className="field">
             <label htmlFor="email">Email</label>
